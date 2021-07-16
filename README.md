@@ -2,9 +2,10 @@
 
 # Chuẩn bị: 
 - Server master và node. 
-- Có quyền sudo
+- Có user ubuntu có quyền sudo và có thư mục home
 - Cấu hình ~./ssh/config để ssh vào server. 
 - Update thông tin vào file host của ansible.
+- 
 
 # Run: 
 - Cài đặt các gói phụ thuộc chạy trên all server. 
