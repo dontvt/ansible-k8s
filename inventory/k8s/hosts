@@ -1,0 +1,11 @@
+[cluster_ip]
+donguyen_lab_master_01
+
+[master_ip]
+donguyen_lab_master_02
+
+[node_ip]
+donguyen_lab_node_01
+
+[all:vars]
+ ansible_python_interpreter=/usr/bin/python3

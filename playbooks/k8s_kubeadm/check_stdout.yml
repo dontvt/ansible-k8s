@@ -1,0 +1,20 @@
+---
+- hosts: master_ip
+  become: true
+  tasks:
+
+
+## Generate kube join command
+  - name: Generate join command
+    become: false
+    command: kubeadm token create --print-join-command
+    register: join_command
+
+  - name: Copy join command to local file
+    become: false
+    local_action: copy content="{{ join_command.stdout_lines[0] }}" dest="./join_command"
+
+## start docker 
+  handlers:
+    - name: docker status
+      service: name=docker state=started

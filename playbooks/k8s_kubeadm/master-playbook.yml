@@ -1,0 +1,11 @@
+---
+- hosts: master_ip
+  become: true
+  tasks:
+
+##  Join the nodes to the Kubernetes cluster
+  - name: Copy the join command to server location
+    copy: src=k8s_koin_master dest=/tmp/k8s_koin_master.sh mode=0777
+
+  - name: Join the node to cluster
+    command: sh /tmp/k8s_koin_master.sh
