@@ -8,21 +8,24 @@
 
   - name: Initialize the Kubernetes cluster using kubeadm
     #command: kubeadm init --apiserver-advertise-address="54.254.159.139" --apiserver-cert-extra-sans="10.50.0.200" --node-name k8s-master --pod-network-cidr=10.55.0.0/16
-    command: kubeadm init --control-plane-endpoint="13.212.76.90" --upload-certs --apiserver-advertise-address=0.0.0.0 --pod-network-cidr=192.168.0.0/16
+    command: kubeadm init --control-plane-endpoint="{{ IP_LB }}" --upload-certs --apiserver-advertise-address=0.0.0.0 --pod-network-cidr=192.168.0.0/16
 
 
+  - name: Pause for 1 minutes to build apiserver k8s
+    pause:
+      minutes: 1
 ## ubuntu user to access the Kubernetes cluster
-  - name: Setup kubeconfig for ubuntu user
-    command: "{{ item }}"
-    with_items:
-     - mkdir -p /home/ubuntu/.kube
-     - cp -i /etc/kubernetes/admin.conf /home/ubuntu/.kube/config
-     - chown ubuntu:ubuntu /home/ubuntu/.kube/config
+#  - name: Setup kubeconfig for ubuntu user
+#    command: "{{ item }}"
+#    with_items:
+#     - mkdir -p /home/{{ user_deploy }}/.kube
+#     - rsync -av /etc/kubernetes/admin.conf /home/{{ user_deploy }}/.kube/config
+#     - chown -R {{ user_deploy }}:{{ user_deploy }} /home/{{ user_deploy }}/.kube
 
 ## container networking provider
   - name: Install calico pod network
-    become: false
-    command: kubectl create -f https://docs.projectcalico.org/v3.15/manifests/calico.yaml
+    become: true
+    command: kubectl --kubeconfig=/etc/kubernetes/admin.conf create -f https://docs.projectcalico.org/v3.15/manifests/calico.yaml
 
 
 
@@ -43,7 +46,7 @@
 
 ## Generate kube join command
   - name: Generate join command
-    become: false
+    become: true
     command: kubeadm token create --print-join-command
     register: join_command
 

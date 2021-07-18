@@ -1,0 +1,6 @@
+---
+- import_playbook: add_user.yml
+- import_playbook: initialize-playbook.yml
+- import_playbook: cluster-playbook.yml
+- import_playbook: master-playbook.yml
+- import_playbook: node-playbook.yml
